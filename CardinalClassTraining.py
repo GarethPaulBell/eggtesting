@@ -42,7 +42,7 @@ train_data_dir = 'data3/train'
 validation_data_dir = 'data3/validation'
 nb_train_samples = 60
 nb_validation_samples = 20
-epochs = 10
+epochs = 40
 batch_size = 4
 
 
