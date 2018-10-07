@@ -35,10 +35,10 @@ from keras import backend as K
 
 
 # dimensions of our images.
-img_width, img_height = 121, 121
+img_width, img_height = 31, 31
 
-train_data_dir = 'data/train'
-validation_data_dir = 'data/validation'
+train_data_dir = 'data4/train'
+validation_data_dir = 'data4/validation'
 nb_train_samples = 1441
 nb_validation_samples = 961
 epochs = 300
