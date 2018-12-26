@@ -2,10 +2,10 @@
 # python simple_detection.py --image beagle.png --confidence 0.9
 
 # import the necessary packages
-from pyimagesearch.utils.simple_obj_det import image_pyramid
-from pyimagesearch.utils.simple_obj_det import sliding_window
-from pyimagesearch.utils.simple_obj_det import classify_batch
-from keras.applications import ResNet50
+from simple_obj_det import image_pyramid
+from simple_obj_det import sliding_window
+from simple_obj_det import classify_batch
+from keras.models import load_model
 from keras.preprocessing.image import img_to_array
 from keras.applications import imagenet_utils
 from imutils.object_detection import non_max_suppression
@@ -23,15 +23,15 @@ ap.add_argument("-c", "--confidence", type=float, default=0.5,
 args = vars(ap.parse_args())
 
 # initialize variables used for the object detection procedure
-INPUT_SIZE = (350, 350)
+INPUT_SIZE = (2776, 2776)
 PYR_SCALE = 1.5
 WIN_STEP = 16
-ROI_SIZE = (224, 224)
-BATCH_SIZE = 64
+ROI_SIZE = (31, 31)
+BATCH_SIZE = 32
 
 # load our the network weights from disk
 print("[INFO] loading network...")
-model = ResNet50(weights="imagenet", include_top=True)
+model = load_model('/root/eggtesting/fiveEpochs.h5')
 
 # initialize the object detection dictionary which maps class labels
 # to their predicted bounding boxes and associated probability
@@ -40,7 +40,10 @@ labels = {}
 # load the input image from disk and grab its dimensions
 orig = cv2.imread(args["image"])
 (h, w) = orig.shape[:2]
-
+print('===================================================================')
+print(h)
+print(w)
+print('===================================================================')
 # resize the input image to be a square
 resized = cv2.resize(orig, INPUT_SIZE, interpolation=cv2.INTER_CUBIC)
 
@@ -62,6 +65,9 @@ for image in image_pyramid(resized, scale=PYR_SCALE,
 		roi = img_to_array(roi)
 		roi = np.expand_dims(roi, axis=0)
 		roi = imagenet_utils.preprocess_input(roi)
+		print(x)
+		print(y)
+        
 
 		# if the batch is None, initialize it
 		if batchROIs is None:
@@ -98,7 +104,7 @@ print("[INFO] detections took {:.4f} seconds".format(end - start))
 # loop over the labels for each of detected objects in the image
 for k in labels.keys():
 	# clone the input image so we can draw on it
-	clone = resized.copy()
+	clopytonne = resized.copy()
 
 	# loop over all bounding boxes for the label and draw them on
 	# the image
@@ -116,6 +122,7 @@ for k in labels.keys():
 	boxes = np.array([p[0] for p in labels[k]])
 	proba = np.array([p[1] for p in labels[k]])
 	boxes = non_max_suppression(boxes, proba)
+
 
 	# loop over the bounding boxes again, this time only drawing the
 	# ones that were *not* suppressed

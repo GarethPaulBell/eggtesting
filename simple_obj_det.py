@@ -28,7 +28,7 @@ def image_pyramid(image, scale=1.5, minSize=(224, 224)):
 		yield image
 
 def classify_batch(model, batchROIs, batchLocs, labels, minProb=0.5,
-	top=10, dims=(224, 224)):
+	top=10, dims=(2766, 2766)):
 	# pass our batch ROIs through our network and decode the
 	# predictions
 	preds = model.predict(batchROIs)

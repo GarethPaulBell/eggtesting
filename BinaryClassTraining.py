@@ -32,7 +32,12 @@ from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 from keras import backend as K
+from tensorflow.keras.callbacks import TensorBoard
+import numpy as np
+import time as time
 
+NAME = "EggsVsNoEggs-{}".format(int(time.time()))
+tensorboard = TensorBoard(log_dir ="logs/{}".format(NAME))
 
 # dimensions of our images.
 img_width, img_height = 31, 31
@@ -84,26 +89,29 @@ train_datagen = ImageDataGenerator(
 # only rescaling
 test_datagen = ImageDataGenerator(rescale=1. / 255)
 
-# Images from the training directory
+print("Images from the training directory ======================")
 train_generator = train_datagen.flow_from_directory(
     train_data_dir,
     target_size=(img_width, img_height),
     batch_size=batch_size,
     class_mode='binary')
 
-# Images from the validation directory
+print("Images from the validation directory ======================")
 validation_generator = test_datagen.flow_from_directory(
     validation_data_dir,
     target_size=(img_width, img_height),
     batch_size=batch_size,
     class_mode='binary')
-
+print("model.fit_generator ======================")
 model.fit_generator(
     train_generator,
     steps_per_epoch=nb_train_samples // batch_size,
     epochs=epochs,
     validation_data=validation_generator,
-    validation_steps=nb_validation_samples // batch_size)
+    validation_steps=nb_validation_samples // batch_size,
+    callbacks=[tensorboard])
 
-model.save('second_try.h5')
+print("model.save ======================")
+model.save('fiveEpochs.h5')
+
         
